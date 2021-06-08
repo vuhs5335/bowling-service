@@ -1,6 +1,8 @@
 package com.app.bowlingservice.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class BowlingGame extends Game{
@@ -9,10 +11,14 @@ public class BowlingGame extends Game{
 	
 	private Map<Integer, BowlingGameFrame> frames;
 	
+	private List<String> messages;
+	
 	public BowlingGame() {
 		super();
 		
 		initFrames();
+		
+		messages = new ArrayList<String>();
 	}
 	
 	private void initFrames() {
@@ -36,18 +42,35 @@ public class BowlingGame extends Game{
 		
 		if (roll == null) {
 			
-			System.err.println("You've palyed all " + BowlingGameFrame.MAX_FRAME +  " frames!");
+			messages.add("You've palyed all " + BowlingGameFrame.MAX_FRAME +  " frames!");
 			
 			return;
 		}
 		
-		roll.setScore(8);
+		int maxPins = 10;
+		
+		int previousPins = currentFrame.getPreviousPins(roll);
+		
+		if (previousPins == maxPins) {
+			
+			roll.setPlayed(true);
+			
+			return;
+		}
+		
+		int points = (int) ((Math.random() * ((maxPins - previousPins) - 1)) + 1);
+		
+		roll.setScore(points);
 		
 		roll.setPlayed(true);
 		
-		System.err.println("I played a turn!!!");
+		updateScore();
 	}
 	
+	private void updateScore() {
+		
+	}
+
 	private BowlingGameFrame getCurrentFrame() {
 		
 		BowlingGameFrame frame = frames.get(currentFrameSequence);
@@ -73,5 +96,13 @@ public class BowlingGame extends Game{
 	public void setFrames(Map<Integer, BowlingGameFrame> frames) {
 		
 		this.frames = frames;
+	}
+
+	public List<String> getMessages() {
+		return messages;
+	}
+
+	public void setMessages(List<String> messages) {
+		this.messages = messages;
 	}
 }

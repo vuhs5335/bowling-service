@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.app.bowlingservice.GameServiceResponse;
 import com.app.bowlingservice.model.IGame;
 import com.app.bowlingservice.service.IGameService;
 
@@ -19,18 +20,22 @@ public class GameController {
 	IGameService service;
 	
 	@GetMapping("/new")
-	public IGame createNewGame() {
+	public GameServiceResponse createNewGame() {
 		
 		IGame game = service.createGame();
 		
-		return game;
+		GameServiceResponse response = new GameServiceResponse(game);
+		
+		return response;
 	}
 	
 	@GetMapping("/play/{id}")
-	public IGame playTurn(@PathVariable Long id) {
+	public GameServiceResponse playTurn(@PathVariable Long id) {
 		
 		IGame game = service.playTurn(id);
 		
-		return game;
+		GameServiceResponse response = new GameServiceResponse(game);
+		
+		return response;
 	}
 }
