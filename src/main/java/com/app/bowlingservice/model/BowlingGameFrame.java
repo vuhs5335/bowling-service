@@ -14,6 +14,8 @@ public class BowlingGameFrame {
 
 	private int frameScore = 0;
 	
+	protected int currentRoll = 0;
+	
 	private boolean isScored;
 	
 	private boolean isStrike;
@@ -21,6 +23,8 @@ public class BowlingGameFrame {
 	private boolean isSpare;
 	
 	private Roll[] rolls;
+	
+	protected int totalPins;
 	
 	public BowlingGameFrame(int frameSequence) {
 		
@@ -47,20 +51,15 @@ public class BowlingGameFrame {
 	@Transient
 	@JsonIgnore
 	public Roll getNextRoll() {
-
-		for (int i = 0; i < rolls.length; i++) {
-
-			Roll roll = rolls[i];
+		
+		try {
+		
+			return rolls[currentRoll];
 			
-			if (roll.isPlayed()) {
-				
-				continue;
-			}
-
-			return roll;
+		} catch (Exception e) {
+			
+			return null;
 		}
-
-		return null;
 	}
 	
 	/**
@@ -138,6 +137,14 @@ public class BowlingGameFrame {
 
 	public void setSpare(boolean isSpare) {
 		this.isSpare = isSpare;
+	}
+
+	public int getCurrentRoll() {
+		return currentRoll;
+	}
+
+	public void setCurrentRoll(int currentRoll) {
+		this.currentRoll = currentRoll;
 	}
 
 }

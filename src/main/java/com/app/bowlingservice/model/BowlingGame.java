@@ -54,7 +54,7 @@ public class BowlingGame extends Game{
 				return;
 			}
 			
-			int previousPins = currentFrame.getPreviousPins(roll);
+			int previousPins = currentFrame.totalPins;
 			
 			int pins = (int) ((Math.random() * ((BowlingGameFrame.MAX_PINS - previousPins) - 1)) + 1);
 			
@@ -80,6 +80,10 @@ public class BowlingGame extends Game{
 				currentFrame.setAllRollsPlayed();
 			}
 			
+			currentFrame.currentRoll ++;
+			
+			currentFrame.totalPins += pins;
+			
 			updateScore();
 		
 		} catch (GameServiceException e) {
@@ -88,6 +92,7 @@ public class BowlingGame extends Game{
 			
 		} catch (Exception e) {
 			
+			e.printStackTrace();
 		}
 	}
 	
