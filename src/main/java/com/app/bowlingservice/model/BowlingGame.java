@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import com.app.bowlingservice.GameServiceException;
 
@@ -14,6 +15,8 @@ public class BowlingGame extends Game{
 	private Map<Integer, BowlingGameFrame> frames;
 	
 	private List<String> messages;
+
+	private int gameScore;
 	
 	public BowlingGame() {
 		super();
@@ -51,27 +54,31 @@ public class BowlingGame extends Game{
 				return;
 			}
 			
-			int maxPins = 10;
-			
 			int previousPins = currentFrame.getPreviousPins(roll);
 			
-			if (previousPins == maxPins) {
-				
-				roll.setPlayed(true);
-				
-				return;
-			}
+			int pins = (int) ((Math.random() * ((BowlingGameFrame.MAX_PINS - previousPins) - 1)) + 1);
 			
-			int points = (int) ((Math.random() * ((maxPins - previousPins) - 1)) + 1);
-			
-			if (points > 10) {
+			if (pins > 10) {
 				
 				throw new GameServiceException("Invalid pin calculation.");
 			}
 			
-			roll.setScore(points);
+			roll.setPins(pins);
 			
 			roll.setPlayed(true);
+			
+			boolean isStrike = previousPins == 0 && pins == BowlingGameFrame.MAX_PINS;
+			
+			currentFrame.setStrike(isStrike);
+			
+			boolean isSpare = !isStrike && previousPins > 0 && ((previousPins + pins) == BowlingGameFrame.MAX_PINS);
+			
+			currentFrame.setSpare(isSpare);
+			
+			if (isStrike || isSpare) {
+				
+				currentFrame.setAllRollsPlayed();
+			}
 			
 			updateScore();
 		
@@ -86,6 +93,13 @@ public class BowlingGame extends Game{
 	
 	private void updateScore() {
 		
+		int score = 0;
+		
+		for (Entry<Integer, BowlingGameFrame> entry : frames.entrySet()) {
+			
+			BowlingGameFrame frame = entry.getValue();
+			
+		}
 	}
 
 	public BowlingGameFrame getCurrentFrame() {
@@ -121,5 +135,13 @@ public class BowlingGame extends Game{
 
 	public void setMessages(List<String> messages) {
 		this.messages = messages;
+	}
+
+	public int getGameScore() {
+		return gameScore;
+	}
+
+	public void setGameScore(int gameScore) {
+		this.gameScore = gameScore;
 	}
 }

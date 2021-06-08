@@ -4,7 +4,7 @@ public class Roll{
 	
 	int sequence = 0;
 	
-	int score = 0;
+	int points = 0;
 	
 	boolean played;
 
@@ -13,12 +13,12 @@ public class Roll{
 		this.sequence = sequence;
 	}
 	
-	public int getScore() {
-		return score;
+	public int getPins() {
+		return points;
 	}
 
-	public void setScore(int score) {
-		this.score = score;
+	public void setPins(int pins) {
+		this.points = pins;
 	}
 
 	public boolean isPlayed() {

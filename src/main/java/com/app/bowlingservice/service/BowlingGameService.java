@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.app.bowlingservice.GameNotFoundException;
-import com.app.bowlingservice.GameServiceException;
 import com.app.bowlingservice.model.BowlingGame;
 import com.app.bowlingservice.model.IGame;
 

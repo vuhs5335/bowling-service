@@ -8,13 +8,32 @@ public class BowlingGameFrame {
 	
 	public static final int MAX_FRAME = 2;
 	
-	private int frameSequence = 0;
+	public static final int MAX_PINS = 10;
 	
-	private Roll[] rolls = {new Roll(1), new Roll(2), new Roll(3)};
+	private int frameSequence = 0;
+
+	private int frameScore = 0;
+	
+	private boolean isScored;
+	
+	private boolean isStrike;
+	
+	private boolean isSpare;
+	
+	private Roll[] rolls;
 	
 	public BowlingGameFrame(int frameSequence) {
 		
 		this.frameSequence = frameSequence;
+		
+		int maxRolls = frameSequence < MAX_FRAME ? 2 : 3;
+		
+		rolls = new Roll[maxRolls];
+		
+		for (int i = 0; i < maxRolls; i++) {
+			
+			rolls[i] = new Roll(i + 1);
+		}
 	}
 	
 	public boolean isComplete() {
@@ -33,7 +52,7 @@ public class BowlingGameFrame {
 
 			Roll roll = rolls[i];
 			
-			if (roll.isPlayed() || frameSequence < MAX_FRAME && roll.sequence > 2) {
+			if (roll.isPlayed()) {
 				
 				continue;
 			}
@@ -57,12 +76,22 @@ public class BowlingGameFrame {
 		
 		for (int i = 0; i < currentRoll.sequence - 1; i++) {
 			
-			totalPins += rolls[i].getScore();
+			totalPins += rolls[i].getPins();
 		}
 		
 		return totalPins;
 	}
+	
+	public void setAllRollsPlayed() {
+		
+		for (int i = 0; i < rolls.length; i++) {
 
+			Roll roll = rolls[i];
+			
+			roll.setPlayed(true);
+		}
+	}
+	
 	public int getFrameSequence() {
 		return frameSequence;
 	}
@@ -78,4 +107,37 @@ public class BowlingGameFrame {
 	public void setRolls(Roll[] rolls) {
 		this.rolls = rolls;
 	}
+
+	public int getFrameScore() {
+		return frameScore;
+	}
+
+	public void setFrameScore(int frameScore) {
+		this.frameScore = frameScore;
+	}
+
+	public boolean isScored() {
+		return isScored;
+	}
+
+	public void setScored(boolean isScored) {
+		this.isScored = isScored;
+	}
+
+	public boolean isStrike() {
+		return isStrike;
+	}
+
+	public void setStrike(boolean isStrike) {
+		this.isStrike = isStrike;
+	}
+
+	public boolean isSpare() {
+		return isSpare;
+	}
+
+	public void setSpare(boolean isSpare) {
+		this.isSpare = isSpare;
+	}
+
 }
