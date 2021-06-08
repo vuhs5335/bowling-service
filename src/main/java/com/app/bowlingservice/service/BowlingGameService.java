@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.app.bowlingservice.GameNotFoundException;
+import com.app.bowlingservice.GameServiceException;
 import com.app.bowlingservice.model.BowlingGame;
 import com.app.bowlingservice.model.IGame;
 
@@ -24,17 +25,24 @@ public class BowlingGameService implements IGameService {
 	}
 
 	@Override
-	public IGame playTurn(Long id) {
+	public IGame playTurn(Long id) throws GameNotFoundException{
 		
-		IGame game = appService.getGameById(id);
+		IGame game = null;
 		
 		try {
+			
+			game = appService.getGameById(id);
+			
+			if (game == null) {
+				
+				throw new GameNotFoundException();
+			}
 			
 			game.playTurn();
 		
 		} catch (GameNotFoundException e) {
 			
-			e.printStackTrace();
+			throw e;
 		}
 		
 		return game;

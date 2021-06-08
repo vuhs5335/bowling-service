@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.app.bowlingservice.GameServiceException;
+
 public class BowlingGame extends Game{
 	
 	private int currentFrameSequence = 0;
@@ -34,44 +36,59 @@ public class BowlingGame extends Game{
 	}
 
 	@Override
-	public void playTurn() {
+	public void playTurn(){
 		
-		BowlingGameFrame currentFrame = getCurrentFrame();
+		try {
 		
-		Roll roll = currentFrame.getNextRoll();
-		
-		if (roll == null) {
+			BowlingGameFrame currentFrame = getCurrentFrame();
 			
-			messages.add("You've palyed all " + BowlingGameFrame.MAX_FRAME +  " frames!");
+			Roll roll = currentFrame.getNextRoll();
 			
-			return;
-		}
-		
-		int maxPins = 10;
-		
-		int previousPins = currentFrame.getPreviousPins(roll);
-		
-		if (previousPins == maxPins) {
+			if (roll == null) {
+				
+				messages.add("You've palyed all " + BowlingGameFrame.MAX_FRAME +  " frames!");
+				
+				return;
+			}
+			
+			int maxPins = 10;
+			
+			int previousPins = currentFrame.getPreviousPins(roll);
+			
+			if (previousPins == maxPins) {
+				
+				roll.setPlayed(true);
+				
+				return;
+			}
+			
+			int points = (int) ((Math.random() * ((maxPins - previousPins) - 1)) + 1);
+			
+			if (points > 10) {
+				
+				throw new GameServiceException("Invalid pin calculation.");
+			}
+			
+			roll.setScore(points);
 			
 			roll.setPlayed(true);
 			
-			return;
+			updateScore();
+		
+		} catch (GameServiceException e) {
+			
+			messages.add(e.getMessage());
+			
+		} catch (Exception e) {
+			
 		}
-		
-		int points = (int) ((Math.random() * ((maxPins - previousPins) - 1)) + 1);
-		
-		roll.setScore(points);
-		
-		roll.setPlayed(true);
-		
-		updateScore();
 	}
 	
 	private void updateScore() {
 		
 	}
 
-	private BowlingGameFrame getCurrentFrame() {
+	public BowlingGameFrame getCurrentFrame() {
 		
 		BowlingGameFrame frame = frames.get(currentFrameSequence);
 		

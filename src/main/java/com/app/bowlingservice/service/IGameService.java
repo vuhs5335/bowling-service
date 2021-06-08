@@ -1,5 +1,6 @@
 package com.app.bowlingservice.service;
 
+import com.app.bowlingservice.GameNotFoundException;
 import com.app.bowlingservice.model.IGame;
 
 public interface IGameService {
@@ -8,6 +9,6 @@ public interface IGameService {
 	
 	public IGame createGame();
 	
-	public IGame playTurn(Long id);
+	public IGame playTurn(Long id) throws GameNotFoundException;
 	
 }

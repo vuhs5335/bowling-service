@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.app.bowlingservice.GameNotFoundException;
+import com.app.bowlingservice.GameServiceException;
 import com.app.bowlingservice.GameServiceResponse;
 import com.app.bowlingservice.model.IGame;
 import com.app.bowlingservice.service.IGameService;
@@ -32,9 +34,20 @@ public class GameController {
 	@GetMapping("/play/{id}")
 	public GameServiceResponse playTurn(@PathVariable Long id) {
 		
-		IGame game = service.playTurn(id);
+		IGame game = null;
 		
-		GameServiceResponse response = new GameServiceResponse(game);
+		GameServiceResponse response = new GameServiceResponse();
+		
+		try {
+			
+			game = service.playTurn(id);
+			
+			response.setGameData(game);
+			
+		} catch (GameNotFoundException e) {
+			
+			response.setMessage(e.getMessage());
+		}
 		
 		return response;
 	}

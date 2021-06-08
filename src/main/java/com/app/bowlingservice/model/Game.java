@@ -14,7 +14,7 @@ public class Game implements IGame{
 		initialize();
 	}
 	
-	public void playTurn() {
+	public void playTurn(){
 		
 	}
 	

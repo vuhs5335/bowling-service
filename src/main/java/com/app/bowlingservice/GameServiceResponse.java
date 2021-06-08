@@ -13,6 +13,8 @@ public class GameServiceResponse {
 	
 	private Date responseDate;
 	
+	private String message;
+	
 	private IGame gameData;
 	
 	public GameServiceResponse() {
@@ -51,6 +53,14 @@ public class GameServiceResponse {
 
 	public void setResponseDate(Date responseDate) {
 		this.responseDate = responseDate;
+	}
+	
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
 	}
 
 	public IGame getGameData() {
