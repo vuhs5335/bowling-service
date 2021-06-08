@@ -62,25 +62,6 @@ public class BowlingGameFrame {
 		}
 	}
 	
-	/**
-	 * Returns the total number of pins that have been knocked down 
-	 * in previous rolls. 
-	 * 
-	 * @param currentRoll
-	 * @return
-	 */
-	public int getPreviousPins(Roll currentRoll) {
-		
-		int totalPins = 0;
-		
-		for (int i = 0; i < currentRoll.sequence - 1; i++) {
-			
-			totalPins += rolls[i].getPins();
-		}
-		
-		return totalPins;
-	}
-	
 	public void setAllRollsPlayed() {
 		
 		for (int i = 0; i < rolls.length; i++) {
