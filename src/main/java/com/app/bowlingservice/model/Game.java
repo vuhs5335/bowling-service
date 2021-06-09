@@ -6,7 +6,7 @@ public class Game implements IGame{
 
 	private long id;
 	
-	private int score;
+	protected int score;
 	
 	private static final AtomicLong counter = new AtomicLong();
 	

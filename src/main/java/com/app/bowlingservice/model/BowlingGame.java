@@ -16,8 +16,6 @@ public class BowlingGame extends Game{
 	
 	private List<String> messages;
 
-	private int gameScore;
-	
 	public BowlingGame() {
 		super();
 		
@@ -49,15 +47,15 @@ public class BowlingGame extends Game{
 			
 			if (roll == null) {
 				
-				messages.add("You've palyed all " + BowlingGameFrame.MAX_FRAME +  " frames!");
+				messages.add("You've played all " + BowlingGameFrame.MAX_FRAME +  " frames!");
 				
 				return;
 			}
 			
 			int previousPins = currentFrame.totalPins;
 			
-			int pins = (int) ((Math.random() * ((BowlingGameFrame.MAX_PINS - previousPins) - 1)) + 1);
-			
+			int pins = (int) (Math.random() * (BowlingGameFrame.MAX_PINS - previousPins));
+
 			if (pins > 10) {
 				
 				throw new GameServiceException("Invalid pin calculation.");
@@ -98,12 +96,25 @@ public class BowlingGame extends Game{
 	
 	private void updateScore() {
 		
-		int score = 0;
+		score = 0;
 		
 		for (Entry<Integer, BowlingGameFrame> entry : frames.entrySet()) {
 			
 			BowlingGameFrame frame = entry.getValue();
-			
+
+			if (frame.isScored()){
+
+				score += frame.totalPins;
+
+				continue;
+			}
+
+			if (!frame.isSpare() && !frame.isStrike() && frame.isComplete()){
+
+				score += frame.totalPins;
+
+				frame.setScored(true);
+			}
 		}
 	}
 
@@ -140,13 +151,5 @@ public class BowlingGame extends Game{
 
 	public void setMessages(List<String> messages) {
 		this.messages = messages;
-	}
-
-	public int getGameScore() {
-		return gameScore;
-	}
-
-	public void setGameScore(int gameScore) {
-		this.gameScore = gameScore;
 	}
 }
