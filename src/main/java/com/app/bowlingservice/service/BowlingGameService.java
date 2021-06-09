@@ -24,7 +24,7 @@ public class BowlingGameService implements IGameService {
 	}
 
 	@Override
-	public IGame playTurn(Long id) throws GameNotFoundException{
+	public IGame playTurn(Long id, Integer pins) throws GameNotFoundException{
 		
 		IGame game = null;
 		
@@ -37,7 +37,7 @@ public class BowlingGameService implements IGameService {
 				throw new GameNotFoundException();
 			}
 			
-			game.playTurn();
+			game.playTurn(pins);
 		
 		} catch (GameNotFoundException e) {
 			
@@ -45,5 +45,11 @@ public class BowlingGameService implements IGameService {
 		}
 		
 		return game;
+	}
+
+	@Override
+	public IGame playTurn(Long id) throws GameNotFoundException {
+		
+		return playTurn(id, null);
 	}
 }

@@ -18,6 +18,12 @@ public class Game implements IGame{
 		
 	}
 	
+	@Override
+	public void playTurn(Integer pins) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 	private void initialize() {
 		this.setScore(0);
 		this.id = counter.incrementAndGet();
@@ -38,4 +44,6 @@ public class Game implements IGame{
 	public void setScore(int score) {
 		this.score = score;
 	}
+
+	
 }

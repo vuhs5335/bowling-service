@@ -51,4 +51,25 @@ public class GameController {
 		
 		return response;
 	}
+	
+	@GetMapping("/play/{id}/{pins}")
+	public GameServiceResponse playTurn(@PathVariable Long id, @PathVariable(required = false) Integer pins) {
+		
+		IGame game = null;
+		
+		GameServiceResponse response = new GameServiceResponse();
+		
+		try {
+			
+			game = service.playTurn(id, pins);
+			
+			response.setGameData(game);
+			
+		} catch (GameNotFoundException e) {
+			
+			response.setMessage(e.getMessage());
+		}
+		
+		return response;
+	}
 }

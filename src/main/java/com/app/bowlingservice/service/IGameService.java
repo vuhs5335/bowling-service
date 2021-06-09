@@ -11,4 +11,5 @@ public interface IGameService {
 	
 	public IGame playTurn(Long id) throws GameNotFoundException;
 	
+	public IGame playTurn(Long id, Integer pins) throws GameNotFoundException;
 }

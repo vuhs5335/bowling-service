@@ -10,6 +10,8 @@ public class BowlingGameFrame {
 	
 	public static final int MAX_PINS = 10;
 	
+	public int maxRoll = 0;
+	
 	private int frameSequence = 0;
 
 	private int frameScore = 0;
@@ -26,15 +28,17 @@ public class BowlingGameFrame {
 	
 	protected int totalPins;
 	
+	protected int points;
+	
 	public BowlingGameFrame(int frameSequence) {
 		
 		this.frameSequence = frameSequence;
 		
-		int maxRolls = frameSequence < MAX_FRAME ? 2 : 3;
+		maxRoll = frameSequence < MAX_FRAME ? 2 : 3;
 		
-		rolls = new Roll[maxRolls];
+		rolls = new Roll[maxRoll];
 		
-		for (int i = 0; i < maxRolls; i++) {
+		for (int i = 0; i < maxRoll; i++) {
 			
 			rolls[i] = new Roll(i + 1);
 		}
@@ -54,6 +58,14 @@ public class BowlingGameFrame {
 		
 		try {
 		
+			// check if last frame should allow 3rd roll. 
+
+			/*if (frameSequence == MAX_FRAME 
+					&& currentRoll == maxRoll 
+					&& (!isStrike && isSpare)) {
+				return null;
+			}*/
+			
 			return rolls[currentRoll];
 			
 		} catch (Exception e) {
@@ -62,13 +74,29 @@ public class BowlingGameFrame {
 		}
 	}
 	
-	public void setAllRollsPlayed() {
+	public void updateRollsAndPinsForStrikeSpare() {
 		
-		for (int i = 0; i < rolls.length; i++) {
+		Roll previousRoll = rolls[currentRoll - 1];
+			
+		// Reset pins for spare or strike in the last frame.
+		
+		if (frameSequence == MAX_FRAME && previousRoll.isStrikeOrSpare()) {
+			
+			totalPins = 0;
+		}
+		
+		for (int i = currentRoll; i < rolls.length; i++) {
 
 			Roll roll = rolls[i];
 			
+			if (frameSequence == MAX_FRAME && previousRoll.isStrikeOrSpare()) {
+				
+				continue;
+			}
+			
 			roll.setPlayed(true);
+			
+			currentRoll ++;
 		}
 	}
 	
@@ -109,7 +137,11 @@ public class BowlingGameFrame {
 	}
 
 	public void setStrike(boolean isStrike) {
+		if (!isStrike) 
+			return;
+		
 		this.isStrike = isStrike;
+	
 	}
 
 	public boolean isSpare() {
@@ -117,7 +149,11 @@ public class BowlingGameFrame {
 	}
 
 	public void setSpare(boolean isSpare) {
+		if (!isSpare) 
+			return;
+		
 		this.isSpare = isSpare;
+	
 	}
 
 	public int getCurrentRoll() {
@@ -126,6 +162,14 @@ public class BowlingGameFrame {
 
 	public void setCurrentRoll(int currentRoll) {
 		this.currentRoll = currentRoll;
+	}
+
+	public int getPoints() {
+		return points;
+	}
+
+	public void setPoints(int points) {
+		this.points = points;
 	}
 
 }

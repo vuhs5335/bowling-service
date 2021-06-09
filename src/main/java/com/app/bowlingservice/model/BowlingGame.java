@@ -38,6 +38,11 @@ public class BowlingGame extends Game{
 
 	@Override
 	public void playTurn(){
+		playTurn(null);
+	}
+	
+	@Override
+	public void playTurn(Integer pins){
 		
 		try {
 		
@@ -54,33 +59,41 @@ public class BowlingGame extends Game{
 			
 			int previousPins = currentFrame.totalPins;
 			
-			int pins = (int) (Math.random() * (BowlingGameFrame.MAX_PINS - previousPins));
+			pins = pins != null ? pins : (int) (Math.random() * (BowlingGameFrame.MAX_PINS - previousPins));
 
 			if (pins > 10) {
 				
 				throw new GameServiceException("Invalid pin calculation.");
 			}
 			
+			boolean isStrike = previousPins == 0 && pins == BowlingGameFrame.MAX_PINS;
+			
+			boolean isSpare = !isStrike && previousPins > 0 && ((previousPins + pins) == BowlingGameFrame.MAX_PINS);
+			
+			// Update the roll. 
+			
+			roll.setStrike(isStrike);
+			
+			roll.setSpare(isSpare);
+			
 			roll.setPins(pins);
 			
 			roll.setPlayed(true);
 			
-			boolean isStrike = previousPins == 0 && pins == BowlingGameFrame.MAX_PINS;
+			// Update the frame. 
 			
 			currentFrame.setStrike(isStrike);
 			
-			boolean isSpare = !isStrike && previousPins > 0 && ((previousPins + pins) == BowlingGameFrame.MAX_PINS);
-			
 			currentFrame.setSpare(isSpare);
-			
-			if (isStrike || isSpare) {
-				
-				currentFrame.setAllRollsPlayed();
-			}
 			
 			currentFrame.currentRoll ++;
 			
 			currentFrame.totalPins += pins;
+			
+			if (roll.isStrikeOrSpare()) {
+				
+				currentFrame.updateRollsAndPinsForStrikeSpare();
+			}
 			
 			updateScore();
 		

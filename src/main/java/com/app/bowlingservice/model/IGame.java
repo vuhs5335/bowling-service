@@ -7,4 +7,6 @@ public interface IGame {
 	long getId();
 	
 	void playTurn() ;
+	
+	void playTurn(Integer pins) ;
 }
