@@ -1,12 +1,12 @@
 package com.app.bowlingservice.model;
 
+import java.beans.Transient;
+
 public class Roll{
 	
 	int sequence = 0;
 	
 	int pins = 0;
-	
-	boolean played;
 	
 	boolean isStrike;
 	
@@ -23,14 +23,6 @@ public class Roll{
 
 	public void setPins(int pins) {
 		this.pins = pins;
-	}
-
-	public boolean isPlayed() {
-		return played;
-	}
-
-	public void setPlayed(boolean played) {
-		this.played = played;
 	}
 
 	public int getSequence() {
@@ -57,6 +49,7 @@ public class Roll{
 		this.isSpare = isSpare;
 	}
 	
+	@Transient
 	public boolean isStrikeOrSpare() {
 		return isStrike || isSpare;
 	}

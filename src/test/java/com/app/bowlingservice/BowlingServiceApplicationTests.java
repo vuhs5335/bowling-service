@@ -52,7 +52,7 @@ class BowlingServiceApplicationTests {
 			
 			int expected = 2;
 			
-			int actual = game.getCurrentFrame().getNextRoll().getSequence();
+			int actual = game.getCurrentFrame().getCreateRoll().getSequence();
 			
 			assertEquals(expected, actual);
 			
@@ -65,6 +65,91 @@ class BowlingServiceApplicationTests {
 	@Test
 	public void score20GutterGame() {
 		
+		BowlingGame game = (BowlingGame) service.createGame();
+			
+		int expected = 0;
+		
+		for (int i = 0; i < 20; i++) {
+			
+			game.playTurn(0);
+		}
+		
+		int actual = game.getScore();
+		
+		assertEquals(expected, actual);
 	}
 	
+	@Test
+	public void score20PointGame() {
+		
+		BowlingGame game = (BowlingGame) service.createGame();
+		
+		int expected = 20;
+		
+		for (int i = 0; i < 20; i++) {
+			
+			game.playTurn(1);
+		}
+		
+		int actual = game.getScore();
+		
+		assertEquals(expected, actual);
+	}
+	
+	@Test
+	public void run2Spares17Gutters() {
+		
+		BowlingGame game = (BowlingGame) service.createGame();
+		
+		int expected = 19;
+		
+		int[] rolls = {5,5,3,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+		
+		for (int i = 0; i < rolls.length; i++) {
+			
+			game.playTurn(rolls[i]);
+		}
+		
+		int actual = game.getScore();
+		
+		assertEquals(expected, actual);
+	}
+	
+	@Test
+	public void run1Strike16Gutters() {
+		
+		BowlingGame game = (BowlingGame) service.createGame();
+		
+		int expected = 22;
+		
+		int[] rolls = {10,3,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+		
+		for (int i = 0; i < rolls.length; i++) {
+			
+			game.playTurn(rolls[i]);
+		}
+		
+		int actual = game.getScore();
+		
+		assertEquals(expected, actual);
+	}
+	
+	@Test
+	public void perfectGame() {
+		
+		BowlingGame game = (BowlingGame) service.createGame();
+		
+		int expected = 300;
+		
+		int[] rolls = {10,10,10,10,10,10,10,10,10,10,10,10};
+		
+		for (int i = 0; i < rolls.length; i++) {
+			
+			game.playTurn(rolls[i]);
+		}
+		
+		int actual = game.getScore();
+		
+		assertEquals(expected, actual);
+	}
 }

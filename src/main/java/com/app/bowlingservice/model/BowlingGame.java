@@ -1,10 +1,9 @@
 package com.app.bowlingservice.model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import com.app.bowlingservice.GameServiceException;
 
@@ -26,7 +25,7 @@ public class BowlingGame extends Game{
 	
 	private void initFrames() {
 		
-		frames = new HashMap<Integer, BowlingGameFrame>();
+		frames = new LinkedHashMap<Integer, BowlingGameFrame>();
 		
 		for (int i = 1; i < BowlingGameFrame.MAX_FRAME + 1; i++) {
 			
@@ -38,6 +37,7 @@ public class BowlingGame extends Game{
 
 	@Override
 	public void playTurn(){
+		
 		playTurn(null);
 	}
 	
@@ -48,54 +48,14 @@ public class BowlingGame extends Game{
 		
 			BowlingGameFrame currentFrame = getCurrentFrame();
 			
-			Roll roll = currentFrame.getNextRoll();
-			
-			if (roll == null) {
+			if (currentFrame.isComplete()) {
 				
-				messages.add("You've played all " + BowlingGameFrame.MAX_FRAME +  " frames!");
-				
-				return;
+				throw new GameServiceException("You've played all " + BowlingGameFrame.MAX_FRAME +  " frames!");
 			}
 			
-			int previousPins = currentFrame.totalPins;
+			currentFrame.roll(pins);
 			
-			pins = pins != null ? pins : (int) (Math.random() * (BowlingGameFrame.MAX_PINS - previousPins));
-
-			if (pins > 10) {
-				
-				throw new GameServiceException("Invalid pin calculation.");
-			}
-			
-			boolean isStrike = previousPins == 0 && pins == BowlingGameFrame.MAX_PINS;
-			
-			boolean isSpare = !isStrike && previousPins > 0 && ((previousPins + pins) == BowlingGameFrame.MAX_PINS);
-			
-			// Update the roll. 
-			
-			roll.setStrike(isStrike);
-			
-			roll.setSpare(isSpare);
-			
-			roll.setPins(pins);
-			
-			roll.setPlayed(true);
-			
-			// Update the frame. 
-			
-			currentFrame.setStrike(isStrike);
-			
-			currentFrame.setSpare(isSpare);
-			
-			currentFrame.currentRoll ++;
-			
-			currentFrame.totalPins += pins;
-			
-			if (roll.isStrikeOrSpare()) {
-				
-				currentFrame.updateRollsAndPinsForStrikeSpare();
-			}
-			
-			updateScore();
+			updateScore(currentFrame);
 		
 		} catch (GameServiceException e) {
 			
@@ -107,37 +67,13 @@ public class BowlingGame extends Game{
 		}
 	}
 	
-	private void updateScore() {
-		
-		score = 0;
-		
-		for (Entry<Integer, BowlingGameFrame> entry : frames.entrySet()) {
-			
-			BowlingGameFrame frame = entry.getValue();
-
-			if (frame.isScored()){
-
-				score += frame.totalPins;
-
-				continue;
-			}
-
-			if (!frame.isSpare() && !frame.isStrike() && frame.isComplete()){
-
-				score += frame.totalPins;
-
-				frame.setScored(true);
-			}
-		}
-	}
-
 	public BowlingGameFrame getCurrentFrame() {
 		
 		BowlingGameFrame frame = frames.get(currentFrameSequence);
 		
 		if (frame.isComplete()) {
 			
-			if (frame.getFrameSequence() < BowlingGameFrame.MAX_FRAME) {
+			if (frame.getSequence() < BowlingGameFrame.MAX_FRAME) {
 				
 				currentFrameSequence ++;
 			}
@@ -148,6 +84,68 @@ public class BowlingGame extends Game{
 		return frame;
 	}
 	
+	private void updateScore(BowlingGameFrame currentFrame) {
+		
+		score = 0;
+		
+		List<BowlingGameFrame> framesList =  frames.values().stream().collect(ArrayList::new, (list, num)-> list.add(num), ArrayList::addAll);
+		
+		for (int i = 0; i <= currentFrame.getSequence() - 1; i++) {	
+			
+			BowlingGameFrame frame = framesList.get(i);
+			
+			if (frame.isScored) {
+				
+				score += frame.getScore();
+				
+				continue;
+			}
+			
+			if (!frame.isComplete()) {
+				
+				continue;
+			}
+			
+			if(frame.extraRollsRemaining > 0) {
+				
+				frame.extraRollsRemaining --;
+			}
+			
+			if (frame.extraRollsRemaining > 0) {
+				
+				continue;
+			}
+			
+			// get next n rolls.
+			int earned = frame.extraRollsEarned;
+			
+			int j = i + 1;
+			
+			while(earned > 0) {
+				
+				BowlingGameFrame nextFrame = framesList.get(j);
+				
+				for (Roll roll : nextFrame.getRolls()) {
+					
+					if (earned == 0) {
+						
+						break;
+					}
+					
+					frame.setScore(frame.getScore() + roll.getPins());
+					
+					earned --;
+				}
+				
+				j++;
+			}
+		
+			score += frame.getScore();
+			
+			frame.isScored  = true;
+		}
+	}
+
 	public Map<Integer, BowlingGameFrame> getFrames() {
 		
 		return frames;
