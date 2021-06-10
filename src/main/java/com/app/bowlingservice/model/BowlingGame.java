@@ -106,35 +106,35 @@ public class BowlingGame extends Game{
 				continue;
 			}
 			
-			if(frame.extraRollsRemaining > 0) {
+			if(frame.extraRollsToProcess > 0) {
 				
-				frame.extraRollsRemaining --;
+				frame.extraRollsToProcess --;
 			}
 			
-			if (frame.extraRollsRemaining > 0) {
+			if (frame.extraRollsToProcess > 0) {
 				
 				continue;
 			}
 			
 			// get next n rolls.
-			int earned = frame.extraRollsEarned;
+			int remainingRolls = frame.extraRollsEarned;
 			
 			int j = i + 1;
 			
-			while(earned > 0) {
+			while(remainingRolls > 0) {
 				
 				BowlingGameFrame nextFrame = framesList.get(j);
 				
 				for (Roll roll : nextFrame.getRolls()) {
 					
-					if (earned == 0) {
+					if (remainingRolls == 0) {
 						
 						break;
 					}
 					
 					frame.setScore(frame.getScore() + roll.getPins());
 					
-					earned --;
+					remainingRolls --;
 				}
 				
 				j++;

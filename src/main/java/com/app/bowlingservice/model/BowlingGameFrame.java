@@ -20,7 +20,7 @@ public class BowlingGameFrame {
 	
 	protected int totalPins = 0;
 	
-	protected int extraRollsRemaining;
+	protected int extraRollsToProcess;
 	
 	protected int extraRollsEarned;
 	
@@ -80,11 +80,11 @@ public class BowlingGameFrame {
 			
 			extraRollsEarned = (roll.isStrike ? 2 : 1);
 			
-			extraRollsRemaining = (roll.isStrike ? 2 : 1) + 1;
+			extraRollsToProcess = (roll.isStrike ? 2 : 1) + 1;
 			
 			if (sequence == MAX_FRAME) {
 				
-				extraRollsRemaining = 0;
+				extraRollsToProcess = 0;
 				
 				extraRollsEarned = 0;
 				
@@ -106,18 +106,11 @@ public class BowlingGameFrame {
 
 	public void roll(Integer pins) throws GameServiceException {
 		
-		Roll roll = getCreateRoll();
-		
-		if (roll == null) {
-
-			throw new GameServiceException(" You've completed the game.");
-		}
-		
 		int previousPins = totalPins;
 		
 		pins = pins != null ? pins : (int) (Math.random() * (MAX_PINS - previousPins));
 
-		if (pins > 10) {
+		if ((pins + previousPins) > 10) {
 			
 			throw new GameServiceException("Invalid pin calculation.");
 		}
@@ -125,6 +118,8 @@ public class BowlingGameFrame {
 		boolean isStrike = previousPins == 0 && pins == MAX_PINS;
 		
 		boolean isSpare = !isStrike && previousPins > 0 && ((previousPins + pins) == MAX_PINS);
+		
+		Roll roll = getCreateRoll();
 		
 		roll.setStrike(isStrike);
 		
