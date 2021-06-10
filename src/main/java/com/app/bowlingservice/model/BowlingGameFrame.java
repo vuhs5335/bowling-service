@@ -147,14 +147,6 @@ public class BowlingGameFrame {
 		this.sequence = sequence;
 	}
 
-	public List<Roll> getRolls() {
-		return rolls;
-	}
-
-	public void setRolls(List<Roll> rolls) {
-		this.rolls = rolls;
-	}
-
 	public boolean isStrike() {
 		return isStrike;
 	}
@@ -189,5 +181,13 @@ public class BowlingGameFrame {
 
 	public void setScore(int score) {
 		this.score = score;
+	}
+	
+	public List<Roll> getRolls() {
+		return rolls;
+	}
+
+	public void setRolls(List<Roll> rolls) {
+		this.rolls = rolls;
 	}
 }

@@ -1,5 +1,6 @@
 package com.app.bowlingservice.model;
 
+import java.beans.Transient;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -67,6 +68,7 @@ public class BowlingGame extends Game{
 		}
 	}
 	
+	@Transient
 	public BowlingGameFrame getCurrentFrame() {
 		
 		BowlingGameFrame frame = frames.get(currentFrameSequence);
@@ -162,5 +164,13 @@ public class BowlingGame extends Game{
 
 	public void setMessages(List<String> messages) {
 		this.messages = messages;
+	}
+
+	public int getCurrentFrameSequence() {
+		return currentFrameSequence;
+	}
+
+	public void setCurrentFrameSequence(int currentFrameSequence) {
+		this.currentFrameSequence = currentFrameSequence;
 	}
 }
