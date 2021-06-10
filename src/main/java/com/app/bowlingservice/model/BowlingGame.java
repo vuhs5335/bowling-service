@@ -46,16 +46,16 @@ public class BowlingGame extends Game{
 		
 		try {
 		
-			BowlingGameFrame currentFrame = getCurrentFrame();
+			BowlingGameFrame frame = getCurrentFrame();
 			
-			if (currentFrame.isComplete()) {
+			if (frame.isComplete()) {
 				
 				throw new GameServiceException("You've played all " + BowlingGameFrame.MAX_FRAME +  " frames!");
 			}
 			
-			currentFrame.roll(pins);
+			frame.roll(pins);
 			
-			updateScore(currentFrame);
+			updateScore(frame);
 		
 		} catch (GameServiceException e) {
 			
