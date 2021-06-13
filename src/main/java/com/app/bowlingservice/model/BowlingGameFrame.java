@@ -14,11 +14,11 @@ public class BowlingGameFrame {
 	
 	public static final int MAX_ROLL = 2;
 	
-	public int maxRoll = 0;
+	public int maxRoll;
 	
-	private int sequence = 0;
+	private int sequence;
 	
-	protected int totalPins = 0;
+	protected int totalPins;
 	
 	protected int extraRollsToProcess;
 	
@@ -34,7 +34,7 @@ public class BowlingGameFrame {
 	
 	private boolean isComplete;
 	
-	private List<Roll> rolls;
+	private final List<Roll> rolls;
 	
 	public BowlingGameFrame(int frameSequence) {
 		
@@ -129,11 +129,7 @@ public class BowlingGameFrame {
 		 
 		updateFrame(roll);
 	}
-	
-	public void roll() throws GameServiceException {
-		roll(null);
-	}
-	
+
 	public boolean isComplete() {
 		
 		return isComplete;
@@ -185,9 +181,5 @@ public class BowlingGameFrame {
 	
 	public List<Roll> getRolls() {
 		return rolls;
-	}
-
-	public void setRolls(List<Roll> rolls) {
-		this.rolls = rolls;
 	}
 }

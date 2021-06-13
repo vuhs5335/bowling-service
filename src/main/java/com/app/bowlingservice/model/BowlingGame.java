@@ -149,11 +149,6 @@ public class BowlingGame extends Game{
 		return frames;
 	}
 
-	public void setFrames(Map<Integer, BowlingGameFrame> frames) {
-		
-		this.frames = frames;
-	}
-
 	public int getCurrentFrameSequence() {
 		return currentFrameSequence;
 	}
