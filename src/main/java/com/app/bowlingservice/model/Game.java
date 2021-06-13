@@ -1,11 +1,15 @@
 package com.app.bowlingservice.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class Game implements IGame{
 
 	private long id;
 	
+	protected List<String> messages;
+
 	protected int score;
 	
 	private static final AtomicLong counter = new AtomicLong();
@@ -20,13 +24,16 @@ public class Game implements IGame{
 	
 	@Override
 	public void playTurn(Integer pins) {
-		// TODO Auto-generated method stub
 		
 	}
 	
 	private void initialize() {
+		
 		this.setScore(0);
+
 		this.id = counter.incrementAndGet();
+		
+		this.messages = new ArrayList<String>();
 	}
 
 	public long getId() {
@@ -45,5 +52,11 @@ public class Game implements IGame{
 		this.score = score;
 	}
 
-	
+	public List<String> getMessages() {
+		return messages;
+	}
+
+	public void setMessages(List<String> messages) {
+		this.messages = messages;
+	}
 }

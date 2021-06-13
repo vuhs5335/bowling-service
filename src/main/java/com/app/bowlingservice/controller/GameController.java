@@ -24,6 +24,8 @@ public class GameController {
 	@GetMapping("/new")
 	public GameServiceResponse createNewGame() {
 		
+		
+
 		IGame game = service.createGame();
 		
 		GameServiceResponse response = new GameServiceResponse(game);
@@ -31,6 +33,18 @@ public class GameController {
 		return response;
 	}
 	
+	@GetMapping("/testvars")
+	public void testVariables(){
+
+		String sysProperty = System.getProperty("sys_prop");
+
+		System.err.println("-------------------- System Property:  " + sysProperty + "--------------------");
+
+		String envVariable = System.getenv("ENV_VAR");
+		
+		System.err.println("-------------------- Environment Variable:  " + envVariable + "--------------------");
+	}
+
 	@GetMapping("/play/{id}")
 	public GameServiceResponse playTurn(@PathVariable Long id) {
 		

@@ -13,15 +13,11 @@ public class BowlingGame extends Game{
 	private int currentFrameSequence = 0;
 	
 	private Map<Integer, BowlingGameFrame> frames;
-	
-	private List<String> messages;
 
 	public BowlingGame() {
 		super();
 		
 		initFrames();
-		
-		messages = new ArrayList<String>();
 	}
 	
 	private void initFrames() {
@@ -156,14 +152,6 @@ public class BowlingGame extends Game{
 	public void setFrames(Map<Integer, BowlingGameFrame> frames) {
 		
 		this.frames = frames;
-	}
-
-	public List<String> getMessages() {
-		return messages;
-	}
-
-	public void setMessages(List<String> messages) {
-		this.messages = messages;
 	}
 
 	public int getCurrentFrameSequence() {
